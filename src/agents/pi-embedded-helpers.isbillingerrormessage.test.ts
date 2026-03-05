@@ -269,6 +269,21 @@ describe("isContextOverflowError", () => {
     }
   });
 
+  it("matches model_context_window_exceeded stop reason surfaced by pi-ai", () => {
+    // Anthropic API (and some OpenAI-compatible providers like ZhipuAI/GLM) return
+    // stop_reason: "model_context_window_exceeded" when the context window is hit.
+    // The pi-ai library surfaces this as "Unhandled stop reason: model_context_window_exceeded".
+    const samples = [
+      "Unhandled stop reason: model_context_window_exceeded",
+      "model_context_window_exceeded",
+      "context_window_exceeded",
+      "Unhandled stop reason: context_window_exceeded",
+    ];
+    for (const sample of samples) {
+      expect(isContextOverflowError(sample)).toBe(true);
+    }
+  });
+
   it("matches Chinese context overflow error messages from proxy providers", () => {
     const samples = [
       "上下文过长",
@@ -483,9 +498,7 @@ describe("classifyFailoverReason", () => {
     expect(
       classifyFailoverReason("model_cooldown: All credentials for model gpt-5 are cooling down"),
     ).toBe("rate_limit");
-    expect(classifyFailoverReason("all credentials for model x are cooling down")).toBe(
-      "rate_limit",
-    );
+    expect(classifyFailoverReason("all credentials for model x are cooling down")).toBeNull();
     expect(
       classifyFailoverReason(
         '{"type":"error","error":{"type":"overloaded_error","message":"Overloaded"}}',
@@ -527,12 +540,19 @@ describe("classifyFailoverReason", () => {
         "This model is currently experiencing high demand. Please try again later.",
       ),
     ).toBe("rate_limit");
-    expect(classifyFailoverReason("LLM error: service unavailable")).toBe("rate_limit");
+    // "service unavailable" combined with overload/capacity indicator → rate_limit
+    // (exercises the new regex — none of the standalone patterns match here)
+    expect(classifyFailoverReason("service unavailable due to capacity limits")).toBe("rate_limit");
     expect(
       classifyFailoverReason(
         '{"error":{"code":503,"message":"The model is overloaded. Please try later","status":"UNAVAILABLE"}}',
       ),
     ).toBe("rate_limit");
+  });
+  it("classifies bare 'service unavailable' as timeout instead of rate_limit (#32828)", () => {
+    // A generic "service unavailable" from a proxy/CDN should stay retryable,
+    // but it should not be treated as provider overload / rate limit.
+    expect(classifyFailoverReason("LLM error: service unavailable")).toBe("timeout");
   });
   it("classifies permanent auth errors as auth_permanent", () => {
     expect(classifyFailoverReason("invalid_api_key")).toBe("auth_permanent");
