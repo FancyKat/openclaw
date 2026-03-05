@@ -1,0 +1,543 @@
+// Crispy Kitsune — openclaw.json5
+// Auto-assembled from layer config-reference.md files on 2026-03-04
+// Version: v0.013+L6.L7
+//
+// Single source of truth: stack/L*/config-reference.md
+// To change a value, edit the layer's config-reference.md, then re-run:
+//   node build/scripts/build-config.js
+//
+// WARNING: This file is generated. Manual edits will be overwritten.
+
+{
+  // ── ^config-blockname (from session-prompt.md) ──
+  Read session-prompt.md — work through all layers in order.
+  ```
+  
+  ---
+  
+  ## Your Role & Boundaries
+  
+  See `CLAUDE.md` § Session Roles & Permission Boundaries for the full scope definition. Summary:
+  
+  **You CAN:** Edit layer files (`stack/L[X]-[name]/*`) within your current layer scope. Load skills for your layer. Run builds to verify. Commit per-layer. Write cross-layer notes for issues affecting other layers.
+  
+  **You CAN NOT:** Edit `CLAUDE.md`, `session-prompt.md`, `manager-session-prompt.md`. Edit layers outside your current scope. Make architectural decisions — flag them as cross-layer notes or questions.
+  
+  **Drift check:** Every 5 major actions, restate: "I am a worker on L[X]. My current task is [task]. I should not be editing [root files / other layers]."
+  
+  ---
+  
+  ## Claude Code Quick Reference
+  
+  Commands you'll use during this session:
+  
+  | Command | When to Use |
+  |---|---|
+  | `/context` | Check context window usage — run every 3-4 major edits |
+  | `/compact [focus]` | Free context while keeping key info — use between phases |
+  | `/clear` | Full context reset — use between layers or when >70% full |
+  | `/cost` | Check token spend — run periodically during long sessions |
+  
+  **Key behaviors:**
+  - Auto-compaction happens when context fills up — drops older tool outputs first, then summarizes conversation. `CLAUDE.md` survives, but session-prompt details may not. Don't rely on it — manage proactively.
+  - Skills auto-discover from `.claude/skills/` — see Skills to Use section for per-layer guidance.
+  - Git operations run via bash. Stage specific files (`git add stack/L[X]-[name]/`), not `git add -A`.
+  
+  ---
+  
+  ## Session Instructions
+  
+  Work through every layer in order (L1 → L7). For each layer, execute the tasks listed in its section below. If a layer has no tasks, skip it.
+  
+  **Work style:**
+  - Build a todo list from the tasks below
+  - Complete one layer fully before moving to the next
+  - Commit after each layer for clean rollback points
+  - Track every change in the layer's `CHANGELOG.md` as you work (Phase 2, Step 5)
+  - If context gets tight, finish the current layer, commit, and note where to pick up
+  - Run `/context` before starting each new layer to gauge remaining budget
+  
+  ---
+  
+  ## Worker Phases
+  
+  ### Phase 1 — Orient
+  
+  1. Read `CLAUDE.md`
+  2. Read this file (`session-prompt.md`)
+  3. Scan cross-layer notes: `grep -rn "status: open" stack/*/cross-layer-notes.md`
+  
+  ### Phase 2 — Execute
+  
+  Work through the Layer Tasks section below (L1 → L7). For each layer that has tasks:
+  
+  1. **Read** the layer's `CHANGELOG.md`. Cross-reference task IDs — any task ID already logged is done, skip it. If all task IDs for this layer are logged, move to the next layer.
+  2. **Load skills** for that layer from the Skills to Use table.
+  3. **Read** the layer's `_overview.md`.
+  4. **Execute** remaining tasks. Apply Quality Rules (see reference section) to files you touch.
+  5. **Track** — log each completed task ID in the layer's `CHANGELOG.md`.
+  6. **Maintain cross-layer-notes** — while in this layer, clean its `cross-layer-notes.md`: delete resolved notes (changelog has the history), mark notes that match task IDs as `tracked → T-LX-##`. If your work creates a new cross-layer issue, add it:
+  
+  ```markdown
+  ## [Date] — [Short description]
+  - **from:** L[X]
+  - **affects:** L[Y], L[Z]
+  - [What happened and what affected layers should do]
+  - **status:** open
+  ```
+  
+  7. **Commit** — `git add stack/L[X]-[name]/` + shared files → `audit(L[X]): [summary]`
+  
+  ### Phase 3 — Teardown
+  
+  After finishing a layer:
+  
+  1. **Check context:** Run `/context` to see usage. If under 50%, you can skip `/clear` and continue to the next layer.
+  2. **Compact or clear:**
+     - If context is 50–70%: Run `/compact focus on completed work for L[X] and upcoming L[Y] tasks` — preserves key context while freeing space.
+     - If context is >70% or switching to a very different layer: Run `/clear` for a full reset.
+  3. **Re-orient** — read `CLAUDE.md` → `session-prompt.md` → resume Phase 2 at the next layer.
+  
+  **Context monitoring:** Run `/context` periodically (every 3-4 major file edits) to track usage. Run `/cost` to monitor token spend. Don't wait for auto-compaction — it drops early instructions and can lose task context.
+  
+  **60% rule:** If context is heavy mid-layer, finish what you can, commit, and teardown. Auto-compaction drops older tool outputs first, then summarizes conversation — your persistent instructions in `CLAUDE.md` survive, but session-prompt task details may not.
+  
+  ---
+  
+  ## Quality Rules (reference — apply to files you touch)
+  
+  These rules come from `CLAUDE.md`. Apply them to files you create or edit during task execution — NOT as a separate audit pass.
+  
+  **Per-file checks:**
+  - **Content accuracy:** Does it match current OpenClaw behavior? Cross-reference official docs.
+  - **Config blocks:** Are `^block-id` tags present and registered in the correct `-main.md` scaffold?
+  - **Linking:** Is the file linked from both `00-INDEX.md` AND its layer's `_overview.md`? Repeated filenames use full paths.
+  - **File format:** Frontmatter + H1 + blockquote + Up link + proper tag namespaces (`layer/` + `status/` + `type/` minimum).
+  - **Layer cascade:** No hardcoded values that belong to a lower layer — use aliases or wikilinks.
+  
+  **When creating new files:**
+  - Frontmatter properties on `_overview.md`: `layer_name`, `layer_number`, `layer_slug`, `config_blocks` (if applicable), `file_count`, `status_summary`
+  - Source-of-truth files get `type/reference` or `type/config` tags
+  - Register in `00-INDEX.md` + parent `_overview.md` + appropriate scaffold
+  
+  **Block ownership (for reference, not a checklist to re-verify every time):**
+  
+  | Layer | Block IDs | Scaffold |
+  |---|---|---|
+  | L1 | `^config-gateway`, `^config-hooks` | `config-main.md` §1, §6 |
+  | L2 | `^config-agents` | `config-main.md` §2 |
+  | L3 | `^config-channels` | `config-main.md` §3 |
+  | L4 | `^ctx-*` (10 blocks) | `context-main.md` |
+  | L5 | `^mode-*`, `^tree-*`, `^triggers-*`, `^filter-*`, `^compaction-*`, `^speed-*` + `^pipeline-{cat}-*` | `focus-main.md` + `pipeline-main.md` |
+  | L6 | `^config-tools/plugins/cron/skills` + `^pipeline-*` | `config-main.md` §4,7,8,9 + `pipeline-main.md` |
+  | L7 | `^config-memory`, `^config-audit` | `config-main.md` §5, §5b |
+  
+  **Changelog template** (create if missing):
+  
+  ```markdown
+  ---
+  tags: [layer/{layer-name}, type/note, status/active]
+  ---
+  # L[X] — [Name] Changelog
+  
+  > All changes to this layer. Each session adds a dated entry.
+  
+  **Up →** [[stack/L[X]-[name]/_overview]]
+  
+  ---
+  
+  ## [Date] — [Session title]
+  
+  ### Added
+  - `new-file.md` — [why]
+  
+  ### Changed
+  - `existing-file.md` — [what and why]
+  
+  ### Removed
+  - `deleted-file.md` — [why, where content went]
+  
+  ### Cross-Layer Effects
+  - [Anything affecting other layers — also add to cross-layer-notes.md]
+  ```
+  
+  ---
+  
+  ## Skills to Use
+  
+  **How skills work:** Claude Code auto-discovers skills from `.claude/skills/` at session start. Skill descriptions are visible automatically — full content loads when relevant context triggers invocation. You can also force-load a skill's full content by reading its file directly: `Read .claude/skills/{skill-name}/SKILL.md`
+  
+  **Always ensure `openclaw-debugger` is active first** — layer-specific references, config blocks, troubleshooting. If it hasn't auto-invoked, force-load: `Read .claude/skills/openclaw-debugger/SKILL.md`
+  
+  | Layer | Additional Skills | Why |
+  |---|---|---|
+  | L1 | — | debugger covers gateway, sandbox, hooks |
+  | L2 | — | debugger covers model cascade, agents, env |
+  | L3 | `openclaw-telegram-bot-skill`, `openclaw-pipeline-creator` | Telegram API, pipeline custom commands |
+  | L4 | `openclaw-context-engineer`, `drift-guardian` | Context file authoring, token budgets, persona drift prevention |
+  | L5 | `drift-guardian`, `engineering-system-design` | Drift prevention, routing architecture |
+  | L6 | `openclaw-pipeline-creator`, `skill-creator`, `mcp-builder`, `engineering-code-review` | Pipeline YAML, skill authoring, MCP servers |
+  | L7 | `openclaw-context-engineer`, `operations-process-optimization` | MEMORY.md curation, audit log design |
+  
+  ---
+  
+  ## Layer Quick Reference
+  
+  | Layer | Directory | Owns | Key Build Outputs |
+  |---|---|---|---|
+  | L1 | `stack/L1-physical/` | `^config-gateway`, `^config-hooks` | `dist/openclaw.json` §1, §6 |
+  | L2 | `stack/L2-runtime/` | `^config-agents` | `dist/openclaw.json` §2 |
+  | L3 | `stack/L3-channel/` | `^config-channels` | `dist/openclaw.json` §3 |
+  | L4 | `stack/L4-session/` | `^ctx-*` blocks (registry in `config-reference.md`) | `dist/context-files/*.md` (10 files) |
+  | L5 | `stack/L5-routing/` | `^mode-*`, `^tree-*`, `^triggers-*`, `^filter-*`, `^compaction-*`, `^speed-*` + `^pipeline-{cat}-*` | `dist/focus/{category}/` (42 files) + `dist/pipelines/` (26 L5 files) |
+  | L6 | `stack/L6-processing/` | `^config-tools/plugins/cron/skills` + `^pipeline-*` | `dist/openclaw.json` §4,7,8,9 + `dist/pipelines/` (12 files) |
+  | L7 | `stack/L7-memory/` | `^config-memory`, `^config-audit` | `dist/openclaw.json` §5, §5b |
+  
+  **Every layer should have:** `_overview.md`, `config-reference.md` (if it owns config blocks), `cross-layer-notes.md`, `CHANGELOG.md`.
+  
+  ---
+  
+  ## Layer Tasks
+  
+  <!-- MANAGER: Add/remove tasks between worker sessions. Each task has a unique ID (T-LX-##). -->
+  <!-- Workers: log task IDs in the layer CHANGELOG.md when complete. -->
+  <!-- Task types: research | fix | organize | edit | create | delete | guide | template -->
+  
+  ### ALL LAYERS — Cross-Layer-Notes Cleanup
+  
+  **Applies to:** L1–L7 (every layer has a `cross-layer-notes.md`)
+  
+  **Do this FIRST on each layer before any other tasks.**
+  
+  1. Read `stack/L[X]-[name]/cross-layer-notes.md`
+  2. **Delete all resolved notes.** The changelog already has the history. Resolved notes are dead weight.
+  3. **Mark tracked notes.** Any open note that has a matching task ID in session-prompt.md, update its status to: `- **status:** tracked → T-LX-##`
+  4. **Leave genuinely open notes.** Future work threads (SCAN re-anchoring, heartbeat drift, category wiring) stay as-is with `status: open`.
+  5. After cleanup, the file should contain ONLY: frontmatter, heading, description, Up link, and open/tracked notes.
+  
+  **Current open notes to cross-reference:**
+  
+  | Layer | Note | Task ID |
+  |---|---|---|
+  | L3 | Codex hardcode in discord/chat-flow.md | T-L3-05 |
+  | L3 | L1 media.md config snippets may drift | none — informational, leave open |
+  | L4 | SCAN re-anchoring needed | none — future (needs L5 trigger) |
+  | L4 | Heartbeat drift detection | none — future (needs drift-guardian eval) |
+  | L5 | Token budget exposure from L4 | T-L4-02 (partial) |
+  | L5 | SCAN re-anchoring (acknowledges L4) | none — future |
+  | L5 | Category blocks ready for wiring | none — future |
+  | L6 | SCAN re-anchoring (acknowledges L4/L5) | none — future |
+  | L6 | Heartbeat drift detection (acknowledges L4) | none — future |
+  
+  ---
+  
+  ### ALL LAYERS — Config-Reference Block Format Standardization
+  
+  **Applies to:** L1 (T-L1-01), L2 (T-L2-01), L3 (T-L3-06), L6 (T-L6-01), L7 (T-L7-01)
+  
+  Reformat every `^config-*` block to COMMENT → BLOCK → ID pattern:
+  
+  ```markdown
+  <!-- ^config-blockname -->
+  <!-- STATUS: ✅ / ⚠️ / 🔲 -->
+  <!-- REASON: What this block configures -->
+  <!-- NOTE: Cross-layer refs, docs links, caveats -->
+  
+  \```json
+  {
+    "cleanJson": true,
+    "noInlineComments": true
+  }
+  \,
+
+  // ── ^config-gateway (from stack/L1-physical/config-reference.md) ──
+  {
+    "gateway": {
+      "port": 18789,
+      "bind": "loopback",
+      "mode": "local",
+      "auth": {
+        "mode": "token",
+        "token": "${OPENCLAW_GATEWAY_TOKEN}"
+      }
+    }
+  },
+
+  // ── ^config-hooks (from stack/L1-physical/config-reference.md) ──
+  {
+    "hooks": {
+      "enabled": true,
+      "token": "${OPENCLAW_HOOKS_TOKEN}",
+      "path": "/hooks",
+      "mappings": [
+        {
+          "match": { "path": "gmail" },
+          "action": "agent",
+          "agentId": "crispy",
+          "deliver": true
+        }
+      ],
+      "entries": {
+        "media-sort": {
+          "kind": "lobster",
+          "pipeline": "pipelines/media-sort.lobster",
+          "on": "message.inbound",
+          "condition": "message.hasAttachment"
+        }
+      }
+    }
+  },
+
+  // ── ^config-agents (from stack/L2-runtime/config-reference.md) ──
+  {
+    "agents": {
+      "defaults": {
+        "workspace": "~/.openclaw/workspace",
+        "model": {
+          "primary": "anthropic/claude-opus-4-6",
+          "fallbacks": [
+            "openrouter/deepseek/deepseek-r1",
+            "openrouter/deepseek/deepseek-chat-v3.2",
+            "openrouter/google/gemini-2.5-flash-lite-preview",
+            "openrouter/openrouter/auto"
+          ]
+        },
+        "models": {
+          "anthropic/claude-opus-4-6": {
+            "alias": "researcher",
+            "params": {
+              "extended_thinking": true,
+              "thinking": "high",
+              "maxTokens": 16384
+            }
+          },
+          "anthropic/claude-sonnet-4-5": {
+            "alias": "workhorse",
+            "params": { "maxTokens": 8192 }
+          },
+          "openai/gpt-5.2": {
+            "alias": "workhorse-code",
+            "params": { "maxTokens": 8192 }
+          },
+          "openrouter/deepseek/deepseek-r1": { "alias": "coder" },
+          "openrouter/deepseek/deepseek-chat-v3.2": { "alias": "triage" },
+          "openrouter/google/gemini-2.5-flash-lite-preview": { "alias": "flash" },
+          "openrouter/openrouter/auto": { "alias": "free" }
+        },
+        "compaction": {
+          "enabled": true,
+          "model": "flash"
+        },
+        "skipBootstrap": false,
+        "heartbeat": {
+          "every": "20m",
+          "target": "last",
+          "directPolicy": "allow"
+        },
+        "sandbox": {
+          "mode": "all",
+          "scope": "session",
+          "workspaceAccess": "rw",
+          "docker": {
+            "enabled": true,
+            "image": "openclaw-sandbox:bookworm-slim",
+            "readOnlyRoot": true,
+            "network": "bridge",
+            "memory": "2g",
+            "cpus": 2
+          }
+        }
+      },
+      "list": [
+        {
+          "id": "crispy",
+          "default": true,
+          "identity": { "name": "Crispy", "emoji": "🦊" },
+          "model": {
+            "primary": "anthropic/claude-sonnet-4-5",
+            "fallbacks": [
+              "anthropic/claude-opus-4-6",
+              "openrouter/deepseek/deepseek-r1",
+              "openrouter/deepseek/deepseek-chat-v3.2",
+              "openrouter/google/gemini-2.5-flash-lite-preview",
+              "openrouter/openrouter/auto"
+            ]
+          }
+        },
+        {
+          "id": "crispy-code",
+          "identity": { "name": "Crispy Code", "emoji": "🔧" },
+          "model": {
+            "primary": "openai/gpt-5.2",
+            "fallbacks": [
+              "anthropic/claude-opus-4-6",
+              "openrouter/deepseek/deepseek-r1",
+              "openrouter/deepseek/deepseek-chat-v3.2",
+              "openrouter/google/gemini-2.5-flash-lite-preview",
+              "openrouter/openrouter/auto"
+            ]
+          }
+        }
+      ]
+    }
+  },
+
+  // ── ^config-channels (from stack/L3-channel/config-reference.md) ──
+  {
+    "channels": {
+      "telegram": {
+        "enabled": true,
+        "botToken": "${TELEGRAM_BOT_TOKEN}",
+        "dmPolicy": "allowlist",
+        "allowFrom": ["tg:${TELEGRAM_MARTY_ID}", "tg:${TELEGRAM_WENTING_ID}"],
+        "groups": {
+          "*": { "requireMention": true }
+        },
+        "streaming": "partial",
+        "customCommands": {
+          "brief": { "description": "Morning briefing" },
+          "email": { "description": "Email triage" },
+          "git": { "description": "Git status" },
+          "pipelines": { "description": "List pipelines" }
+        },
+        "media": {
+          "enabled": true,
+          "inbound_path": "~/.openclaw/workspace/media/inbound/telegram",
+          "keep_sizes": ["large"],
+          "max_file_size_mb": 2000,
+          "cache_downloaded_24h": true,
+          "create_metadata": true,
+          "metadata_format": "json"
+        }
+      },
+      "discord": {
+        "enabled": false,
+        "token": "${DISCORD_BOT_TOKEN}",
+        "dmPolicy": "pairing",
+        "guilds": {
+          "${DISCORD_GUILD_ID}": {
+            "requireMention": false
+          }
+        }
+      }
+    }
+  },
+
+  // ── ^config-tools (from stack/L6-processing/config-reference.md) ──
+  {
+    "tools": {
+      "alsoAllow": ["lobster"],
+      "web": {
+        "search": {
+          "provider": "brave",
+          "apiKey": "${BRAVE_API_KEY}"
+        }
+      },
+      "media": {
+        "audio": { "enabled": true }
+      }
+    }
+  },
+
+  // ── ^config-plugins (from stack/L6-processing/config-reference.md) ──
+  {
+    "plugins": {
+      "lobster": { "enabled": true },
+      "llm-task": {
+        "enabled": true,
+        "maxTokens": 800,
+        "timeout": 30
+      }
+    }
+  },
+
+  // ── ^config-cron (from stack/L6-processing/config-reference.md) ──
+  {
+    "cron": {
+      "enabled": true,
+      "maxConcurrentRuns": 2,
+      "sessionRetention": "24h",
+      "jobs": [
+        {
+          "name": "media-catchup",
+          "cron": "*/30 * * * *",
+          "kind": "lobster",
+          "pipeline": "pipelines/media-catchup.lobster"
+        },
+        {
+          "name": "media-cleanup",
+          "cron": "0 2 * * *",
+          "kind": "lobster",
+          "pipeline": "pipelines/media-cleanup.lobster"
+        }
+      ]
+    }
+  },
+
+  // ── ^config-skills (from stack/L6-processing/config-reference.md) ──
+  {
+    "skills": {
+      "entries": {
+        "sag": { "enabled": true },
+        "gog": {
+          "enabled": true,
+          "env": { "GOG_KEYRING_PASSWORD": "${GOG_KEYRING_PASSWORD}" }
+        }
+      },
+      "load": {
+        "watch": true,
+        "watchDebounceMs": 250
+      },
+      "install": {
+        "preferBrew": true,
+        "nodeManager": "npm"
+      }
+    }
+  },
+
+  // ── ^config-memory (from stack/L7-memory/config-reference.md) ──
+  {
+    "agents": {
+      "defaults": {
+        "memorySearch": {
+          "enabled": true,
+          "provider": "gemini",
+          "model": "gemini-embedding-001",
+          "sync": { "watch": true },
+          "query": {
+            "hybrid": {
+              "enabled": true,
+              "vectorWeight": 0.7,
+              "textWeight": 0.3,
+              "candidateMultiplier": 4,
+              "mmr": { "enabled": true, "lambda": 0.7 },
+              "temporalDecay": { "enabled": true, "halfLifeDays": 30 }
+            }
+          },
+          "cache": { "enabled": true, "maxEntries": 50000 }
+        }
+      }
+    }
+  },
+
+  // ── ^config-audit (from stack/L7-memory/config-reference.md) ──
+  {
+    "agents": {
+      "defaults": {
+        "auditLog": {
+          "enabled": true,
+          "location": "workspace/audit/",
+          "format": "jsonl",
+          "retention": {
+            "days": 90,
+            "archiveAfter": 30
+          },
+          "logToolCalls": true,
+          "logApprovals": true,
+          "logErrors": true,
+          "logTokens": true
+        }
+      }
+    }
+  }
+}

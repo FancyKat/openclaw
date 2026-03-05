@@ -1,0 +1,21 @@
+{
+  "category": "cooking",
+  "targets": {
+    "first_token_ms": 1500,
+    "complete_response_ms": 5000,
+    "pipeline_overhead_ms": 500
+  },
+  "thresholds": {
+    "button_tap_ms": 500,
+    "initial_response_ms": 1500,
+    "multi_turn_ms": 3000,
+    "complex_operation_ms": 8000,
+    "hang_threshold_ms": 8000
+  },
+  "pipelines": {
+    "grocery-list": { "latency_ms": [400, 800], "llm_calls": 1, "sync": true },
+    "recipe-search": { "latency_ms": [500, 1200], "llm_calls": 2, "sync": true },
+    "meal-plan": { "latency_ms": [8000, 15000], "llm_calls": 3, "sync": false },
+    "pantry-check": { "latency_ms": [300, 700], "llm_calls": 0, "sync": true }
+  }
+}

@@ -1,0 +1,982 @@
+{
+  "version": "v0.013+L6.L7",
+  "generatedAt": "2026-03-04T23:33:52.562Z",
+  "layers": {
+    "L1": [
+      {
+        "id": "config-gateway",
+        "source": "stack/L1-physical/config-reference.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "config-hooks",
+        "source": "stack/L1-physical/config-reference.md",
+        "type": "code",
+        "language": "json"
+      }
+    ],
+    "L2": [
+      {
+        "id": "config-agents",
+        "source": "stack/L2-runtime/config-reference.md",
+        "type": "code",
+        "language": "json"
+      }
+    ],
+    "L3": [
+      {
+        "id": "config-channels",
+        "source": "stack/L3-channel/config-reference.md",
+        "type": "code",
+        "language": "json"
+      }
+    ],
+    "L4": [
+      {
+        "id": "ctx-agents-loop",
+        "source": "stack/L4-session/context-files/agents.md",
+        "type": "code",
+        "language": "text"
+      },
+      {
+        "id": "ctx-agents-constraints",
+        "source": "stack/L4-session/context-files/agents.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-agents-priorities",
+        "source": "stack/L4-session/context-files/agents.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-agents-admins",
+        "source": "stack/L4-session/context-files/agents.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-agents-models",
+        "source": "stack/L4-session/context-files/agents.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-agents-memory",
+        "source": "stack/L4-session/context-files/agents.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-agents-channels",
+        "source": "stack/L4-session/context-files/agents.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-agents-subagents",
+        "source": "stack/L4-session/context-files/agents.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-agents-reminders",
+        "source": "stack/L4-session/context-files/agents.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-boot-dashboard",
+        "source": "stack/L4-session/context-files/boot.md",
+        "type": "code",
+        "language": "text"
+      },
+      {
+        "id": "ctx-boot-health",
+        "source": "stack/L4-session/context-files/boot.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-boot-media",
+        "source": "stack/L4-session/context-files/boot.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-bootstrap-purpose",
+        "source": "stack/L4-session/context-files/bootstrap.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-bootstrap-steps",
+        "source": "stack/L4-session/context-files/bootstrap.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-heartbeat-checks",
+        "source": "stack/L4-session/context-files/heartbeat.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-heartbeat-notify",
+        "source": "stack/L4-session/context-files/heartbeat.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-heartbeat-never",
+        "source": "stack/L4-session/context-files/heartbeat.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-heartbeat-tasks",
+        "source": "stack/L4-session/context-files/heartbeat.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-identity-card",
+        "source": "stack/L4-session/context-files/identity.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-identity-origin",
+        "source": "stack/L4-session/context-files/identity.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-identity-lore",
+        "source": "stack/L4-session/context-files/identity.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-memory-people",
+        "source": "stack/L4-session/context-files/memory.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-memory-projects",
+        "source": "stack/L4-session/context-files/memory.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-memory-facts",
+        "source": "stack/L4-session/context-files/memory.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-soul-identity",
+        "source": "stack/L4-session/context-files/soul.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-soul-voice",
+        "source": "stack/L4-session/context-files/soul.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-soul-values",
+        "source": "stack/L4-session/context-files/soul.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-soul-relationships",
+        "source": "stack/L4-session/context-files/soul.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-soul-boundaries",
+        "source": "stack/L4-session/context-files/soul.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-soul-regrounding",
+        "source": "stack/L4-session/context-files/soul.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-status-session",
+        "source": "stack/L4-session/context-files/status.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-status-alerts",
+        "source": "stack/L4-session/context-files/status.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-status-carried",
+        "source": "stack/L4-session/context-files/status.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-tools-preferences",
+        "source": "stack/L4-session/context-files/tools.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-tools-forbidden",
+        "source": "stack/L4-session/context-files/tools.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-tools-gotchas",
+        "source": "stack/L4-session/context-files/tools.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-user-marty-identity",
+        "source": "stack/L4-session/context-files/user.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-user-marty-style",
+        "source": "stack/L4-session/context-files/user.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-user-marty-tech",
+        "source": "stack/L4-session/context-files/user.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-user-marty-focus",
+        "source": "stack/L4-session/context-files/user.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-user-wenting-identity",
+        "source": "stack/L4-session/context-files/user.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-user-marty-accumulated",
+        "source": "stack/L4-session/context-files/user.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "ctx-user-wenting-accumulated",
+        "source": "stack/L4-session/context-files/user.md",
+        "type": "text",
+        "language": "markdown"
+      }
+    ],
+    "L5": [
+      {
+        "id": "mode-coding",
+        "source": "stack/L5-routing/categories/coding/_overview.md",
+        "type": "code",
+        "language": "markdown"
+      },
+      {
+        "id": "tree-coding",
+        "source": "stack/L5-routing/categories/coding/focus-tree.md",
+        "type": "code",
+        "language": "text"
+      },
+      {
+        "id": "filter-coding",
+        "source": "stack/L5-routing/categories/coding/memory-filter.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "compaction-coding",
+        "source": "stack/L5-routing/categories/coding/memory-filter.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "speed-coding",
+        "source": "stack/L5-routing/categories/coding/speed-baselines.md",
+        "type": "code",
+        "language": "text"
+      },
+      {
+        "id": "triggers-coding",
+        "source": "stack/L5-routing/categories/coding/triggers.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "mode-cooking",
+        "source": "stack/L5-routing/categories/cooking/_overview.md",
+        "type": "code",
+        "language": "markdown"
+      },
+      {
+        "id": "tree-cooking",
+        "source": "stack/L5-routing/categories/cooking/focus-tree.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "filter-cooking",
+        "source": "stack/L5-routing/categories/cooking/memory-filter.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "compaction-cooking",
+        "source": "stack/L5-routing/categories/cooking/memory-filter.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "pipeline-cooking-grocery-list",
+        "source": "stack/L5-routing/categories/cooking/pipelines.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "pipeline-cooking-recipe-search",
+        "source": "stack/L5-routing/categories/cooking/pipelines.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "pipeline-cooking-meal-plan",
+        "source": "stack/L5-routing/categories/cooking/pipelines.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "pipeline-cooking-pantry-check",
+        "source": "stack/L5-routing/categories/cooking/pipelines.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "speed-cooking",
+        "source": "stack/L5-routing/categories/cooking/speed-baselines.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "triggers-cooking",
+        "source": "stack/L5-routing/categories/cooking/triggers.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "mode-design",
+        "source": "stack/L5-routing/categories/design/_overview.md",
+        "type": "code",
+        "language": "markdown"
+      },
+      {
+        "id": "tree-design",
+        "source": "stack/L5-routing/categories/design/focus-tree.md",
+        "type": "code",
+        "language": "text"
+      },
+      {
+        "id": "compaction-design",
+        "source": "stack/L5-routing/categories/design/memory-filter.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "filter-design",
+        "source": "stack/L5-routing/categories/design/memory-filter.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "pipeline-design-brand-audit",
+        "source": "stack/L5-routing/categories/design/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "speed-design",
+        "source": "stack/L5-routing/categories/design/speed-baselines.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "triggers-design",
+        "source": "stack/L5-routing/categories/design/triggers.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "mode-finance",
+        "source": "stack/L5-routing/categories/finance/_overview.md",
+        "type": "code",
+        "language": "markdown"
+      },
+      {
+        "id": "tree-finance",
+        "source": "stack/L5-routing/categories/finance/focus-tree.md",
+        "type": "code",
+        "language": "text"
+      },
+      {
+        "id": "filter-finance",
+        "source": "stack/L5-routing/categories/finance/memory-filter.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "compaction-finance",
+        "source": "stack/L5-routing/categories/finance/memory-filter.md",
+        "type": "code",
+        "language": "text"
+      },
+      {
+        "id": "pipeline-finance-market-brief",
+        "source": "stack/L5-routing/categories/finance/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "pipeline-finance-position-check",
+        "source": "stack/L5-routing/categories/finance/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "pipeline-finance-backtest",
+        "source": "stack/L5-routing/categories/finance/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "pipeline-finance-watchlist",
+        "source": "stack/L5-routing/categories/finance/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "pipeline-finance-budget-review",
+        "source": "stack/L5-routing/categories/finance/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "pipeline-finance-expense-tracker",
+        "source": "stack/L5-routing/categories/finance/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "speed-finance",
+        "source": "stack/L5-routing/categories/finance/speed-baselines.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "triggers-finance",
+        "source": "stack/L5-routing/categories/finance/triggers.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "mode-fitness",
+        "source": "stack/L5-routing/categories/fitness/_overview.md",
+        "type": "code",
+        "language": "markdown"
+      },
+      {
+        "id": "tree-fitness",
+        "source": "stack/L5-routing/categories/fitness/focus-tree.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "compaction-fitness",
+        "source": "stack/L5-routing/categories/fitness/memory-filter.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "filter-fitness",
+        "source": "stack/L5-routing/categories/fitness/memory-filter.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "pipeline-fitness-workout-log",
+        "source": "stack/L5-routing/categories/fitness/pipelines.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "pipeline-fitness-progress-check",
+        "source": "stack/L5-routing/categories/fitness/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "pipeline-fitness-program-generator",
+        "source": "stack/L5-routing/categories/fitness/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "pipeline-fitness-rest-day-check",
+        "source": "stack/L5-routing/categories/fitness/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "speed-fitness",
+        "source": "stack/L5-routing/categories/fitness/speed-baselines.md",
+        "type": "code",
+        "language": "text"
+      },
+      {
+        "id": "triggers-fitness",
+        "source": "stack/L5-routing/categories/fitness/triggers.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "mode-habits",
+        "source": "stack/L5-routing/categories/habits/_overview.md",
+        "type": "code",
+        "language": "markdown"
+      },
+      {
+        "id": "tree-habits",
+        "source": "stack/L5-routing/categories/habits/focus-tree.md",
+        "type": "code",
+        "language": "text"
+      },
+      {
+        "id": "filter-habits",
+        "source": "stack/L5-routing/categories/habits/memory-filter.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "compaction-habits",
+        "source": "stack/L5-routing/categories/habits/memory-filter.md",
+        "type": "code",
+        "language": "text"
+      },
+      {
+        "id": "pipeline-habits-habit-checkin",
+        "source": "stack/L5-routing/categories/habits/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "pipeline-habits-habit-review",
+        "source": "stack/L5-routing/categories/habits/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "pipeline-habits-streak-check",
+        "source": "stack/L5-routing/categories/habits/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "pipeline-habits-habit-update",
+        "source": "stack/L5-routing/categories/habits/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "pipeline-habits-habit-reminder",
+        "source": "stack/L5-routing/categories/habits/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "speed-habits",
+        "source": "stack/L5-routing/categories/habits/speed-baselines.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "triggers-habits",
+        "source": "stack/L5-routing/categories/habits/triggers.md",
+        "type": "code",
+        "language": "text"
+      },
+      {
+        "id": "mode-pet-care",
+        "source": "stack/L5-routing/categories/pet-care/_overview.md",
+        "type": "code",
+        "language": "markdown"
+      },
+      {
+        "id": "tree-pet-care",
+        "source": "stack/L5-routing/categories/pet-care/focus-tree.md",
+        "type": "code",
+        "language": "text"
+      },
+      {
+        "id": "filter-pet-care",
+        "source": "stack/L5-routing/categories/pet-care/memory-filter.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "compaction-pet-care",
+        "source": "stack/L5-routing/categories/pet-care/memory-filter.md",
+        "type": "code",
+        "language": "text"
+      },
+      {
+        "id": "pipeline-pet-care-medication-tracker",
+        "source": "stack/L5-routing/categories/pet-care/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "pipeline-pet-care-appointment",
+        "source": "stack/L5-routing/categories/pet-care/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "pipeline-pet-care-feeding-schedule",
+        "source": "stack/L5-routing/categories/pet-care/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "pipeline-pet-care-supply-list",
+        "source": "stack/L5-routing/categories/pet-care/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "pipeline-pet-care-training-log",
+        "source": "stack/L5-routing/categories/pet-care/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "pipeline-pet-care-grooming-schedule",
+        "source": "stack/L5-routing/categories/pet-care/pipelines.md",
+        "type": "code",
+        "language": "yaml"
+      },
+      {
+        "id": "speed-pet-care",
+        "source": "stack/L5-routing/categories/pet-care/speed-baselines.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "triggers-pet-care",
+        "source": "stack/L5-routing/categories/pet-care/triggers.md",
+        "type": "text",
+        "language": "markdown"
+      }
+    ],
+    "L6": [
+      {
+        "id": "pipeline-code-review",
+        "source": "stack/L6-processing/coding/code-review.md",
+        "type": "code",
+        "language": "mermaid"
+      },
+      {
+        "id": "pipeline-deploy",
+        "source": "stack/L6-processing/coding/deploy.md",
+        "type": "code",
+        "language": "mermaid"
+      },
+      {
+        "id": "pipeline-git",
+        "source": "stack/L6-processing/coding/git-pipelines.md",
+        "type": "code",
+        "language": "mermaid"
+      },
+      {
+        "id": "pipeline-project-routing",
+        "source": "stack/L6-processing/coding/project-routing.md",
+        "type": "code",
+        "language": "mermaid"
+      },
+      {
+        "id": "pipeline-testing",
+        "source": "stack/L6-processing/coding/testing.md",
+        "type": "code",
+        "language": "mermaid"
+      },
+      {
+        "id": "config-tools",
+        "source": "stack/L6-processing/config-reference.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "config-plugins",
+        "source": "stack/L6-processing/config-reference.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "config-cron",
+        "source": "stack/L6-processing/config-reference.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "config-skills",
+        "source": "stack/L6-processing/config-reference.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "pipeline-brief",
+        "source": "stack/L6-processing/pipelines/brief.md",
+        "type": "code",
+        "language": "mermaid"
+      },
+      {
+        "id": "pipeline-email",
+        "source": "stack/L6-processing/pipelines/email.md",
+        "type": "code",
+        "language": "mermaid"
+      },
+      {
+        "id": "pipeline-health-check",
+        "source": "stack/L6-processing/pipelines/health-check.md",
+        "type": "code",
+        "language": "mermaid"
+      },
+      {
+        "id": "pipeline-intent-finder",
+        "source": "stack/L6-processing/pipelines/intent-finder.md",
+        "type": "code",
+        "language": "mermaid"
+      },
+      {
+        "id": "pipeline-media",
+        "source": "stack/L6-processing/pipelines/media.md",
+        "type": "code",
+        "language": "mermaid"
+      },
+      {
+        "id": "pipeline-prompt-builder",
+        "source": "stack/L6-processing/pipelines/prompt-builder.md",
+        "type": "code",
+        "language": "mermaid"
+      },
+      {
+        "id": "pipeline-skill-router",
+        "source": "stack/L6-processing/pipelines/skill-router.md",
+        "type": "code",
+        "language": "mermaid"
+      }
+    ],
+    "L7": [
+      {
+        "id": "config-memory",
+        "source": "stack/L7-memory/config-reference.md",
+        "type": "code",
+        "language": "json"
+      },
+      {
+        "id": "config-audit",
+        "source": "stack/L7-memory/config-reference.md",
+        "type": "code",
+        "language": "json"
+      }
+    ],
+    "unknown": [
+      {
+        "id": "env-template",
+        "source": "build/env-main.md",
+        "type": "code",
+        "language": "bash"
+      },
+      {
+        "id": "env-gateway-token",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-anthropic",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-openai",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-openrouter",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-gemini",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-telegram-token",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-telegram-marty",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-telegram-wenting",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-github",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-brave",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-elevenlabs-key",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-elevenlabs-voice",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-mem0",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-discord-token",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-discord-guild",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-hooks-token",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-gog",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-gmail-sa",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-gmail-user",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-gmail-webhook",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-gcp-project",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-anthropic-note",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-delivery",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "env-reconcile",
+        "source": "build/env-main.md",
+        "type": "text",
+        "language": "markdown"
+      },
+      {
+        "id": "config-blockname",
+        "source": "session-prompt.md",
+        "type": "code",
+        "language": "text"
+      },
+      {
+        "id": "pipeline-",
+        "source": "session-prompt.md",
+        "type": "code",
+        "language": "text"
+      }
+    ]
+  }
+}

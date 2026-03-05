@@ -1,0 +1,10 @@
+{
+  "category": ["habits", "habits:tracking", "habits:streaks", "habits:goals"],
+  "cross_category": ["fitness:workout", "cooking:meal-prep", "coding:daily"],
+  "exclude_categories": ["finance:markets"],
+  "boost_fields": ["habit_name", "streak_count", "consistency_rate", "habit_status"],
+  "recency_weight": 0.25,
+  "semantic_weight": 0.2,
+  "category_weight": 0.3,
+  "frequency_weight": 0.25
+}

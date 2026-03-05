@@ -1,0 +1,244 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  Crispy Kitsune — openclaw.json (Complete Reference)       ║
+// ║  JSON5 format — comments & trailing commas allowed         ║
+// ║  Copy to: ~/.openclaw/openclaw.json                        ║
+// ║  Secrets: use ${VAR} refs → see build/.env.example         ║
+// ║  Docs: stack/L2-runtime/config.md                          ║
+// ╚══════════════════════════════════════════════════════════════╝
+{
+  // ─── §1 GATEWAY ────────────────────────────────────────────
+  // Layer: L2-Runtime | Debug: openclaw doctor --fix
+  "gateway": {
+    "port": 18789,
+    "bind": "loopback",               // localhost only (safest)
+    "mode": "local",
+    "auth": {
+      "mode": "token",
+      "token": "${OPENCLAW_GATEWAY_TOKEN}"  // ⚠️ Never hardcode
+    },
+    "reload": { "mode": "hybrid", "debounceMs": 300 }
+  },
+
+  // ─── §2 MODELS ─────────────────────────────────────────────
+  // Layer: L2-Runtime | Debug: openclaw models status
+  "models": {
+    "mode": "merge",
+    "providers": {
+      "openai-codex": {
+        // OAuth, auto-refresh — see OpenAI dashboard
+      },
+      "openrouter": {
+        "apiKey": "${OPENROUTER_API_KEY}"
+      },
+      "google": {
+        "apiKey": "${GEMINI_API_KEY}"
+      }
+    }
+  },
+
+  // ─── §3 AGENTS ─────────────────────────────────────────────
+  // Layer: L4+L5+L6 | Debug: check skipBootstrap, model fallbacks
+  // Architecture: Gateway on HOST, sub-agents sandboxed in Docker
+  "agents": {
+    "defaults": {
+      "workspace": "~/.openclaw/workspace",
+      "model": {
+        "primary": "openai-codex/gpt-5.2-codex",
+        "fallbacks": [
+          "openrouter/anthropic/claude-opus-4-6",
+          "openrouter/auto",
+          "openrouter/openrouter/free",
+          "openrouter/google/gemini-2.5-flash-lite",
+          "openrouter/deepseek/deepseek-v3.2",
+          "openrouter/deepseek/deepseek-r1"
+        ]
+      },
+      "thinkingDefault": "low",          // ⚠️ Consider "medium" for complex tasks
+      "skipBootstrap": true,             // 🔴 Flip to false after writing AGENTS.md + BOOT.md
+      "compaction": { "mode": "safeguard" },
+      "heartbeat": { "every": "20m" },
+      "sandbox": {
+        "mode": "all",
+        "scope": "session",
+        "workspaceAccess": "rw"
+      },
+      "projectRouting": {
+        "enabled": true,
+        "projectsFile": "~/.openclaw/workspace/projects.json",
+        "autoDetect": true
+      },
+      "imageMaxDimensionPx": 1920
+    },
+    "list": [
+      {
+        "id": "crispy",
+        "identity": { "name": "Crispy", "emoji": "🦊" }
+        // Main agent — runs on host, plans work, coordinates sub-agents
+      },
+      {
+        "id": "crispy-code",
+        "identity": { "name": "Crispy Code", "emoji": "🔧" },
+        // Coding sub-agent — always sandboxed for project work
+        "sandbox": {
+          "mode": "all",
+          "scope": "session",
+          "workspaceAccess": "rw",
+          "docker": {
+            "enabled": true,
+            "readOnlyRoot": true,
+            "network": "bridge"          // Needs git, npm, pip
+          }
+        }
+      }
+    ]
+  },
+
+  // ─── §4 CHANNELS ───────────────────────────────────────────
+  // Layer: L3-Channel | Debug: openclaw channels status --probe
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "botToken": "${TELEGRAM_BOT_TOKEN}",
+      "dmPolicy": "allowlist",
+      "allowFrom": ["${TELEGRAM_MARTY_ID}", "${TELEGRAM_WENTING_ID}"],
+      "groupPolicy": "mention",
+      "streamMode": "partial",
+      "media": {
+        "enabled": true,
+        "inbound_path": "~/.openclaw/workspace/media/inbound/telegram",
+        "keep_sizes": ["large"],
+        "max_file_size_mb": 2000,
+        "skip_stickers": false,
+        "cache_downloaded_24h": true,
+        "create_metadata": true,
+        "metadata_format": "json"
+      }
+    },
+    "discord": {
+      "enabled": false,                  // ⚠️ Flip after bot setup
+      "token": "${DISCORD_BOT_TOKEN}",
+      "media": {
+        "enabled": true,
+        "inbound_path": "~/.openclaw/workspace/media/inbound/discord",
+        "download_attachments": true,
+        "voice_channels": {
+          "enabled": true,
+          "auto_record": false,
+          "max_session_duration_s": 3600
+        },
+        "cache_cdn_urls_24h": true,
+        "create_metadata": true
+      }
+    }
+  },
+
+  // ─── §5 TOOLS ──────────────────────────────────────────────
+  // Layer: L6-Processing | Debug: check deny + plugins
+  "tools": {
+    "profile": "full",
+    "alsoAllow": ["lobster"],            // Agent can invoke Lobster pipelines
+    "elevated": {
+      "allowFrom": {
+        "telegram": ["${TELEGRAM_MARTY_ID}", "${TELEGRAM_WENTING_ID}"]
+      }
+    },
+    "web": {
+      "search": {
+        "provider": "brave",
+        "apiKey": "${BRAVE_SEARCH_KEY}"
+      }
+    },
+    "media": {
+      "audio": { "enabled": true }
+    }
+  },
+
+  // ─── §6 MEMORY ─────────────────────────────────────────────
+  // Layer: L7-Memory
+  "memory": {
+    "search": { "enabled": true }
+  },
+
+  // ─── §7 HOOKS ──────────────────────────────────────────────
+  // Layer: L3-Channel | 4-layer media defense — Layer 1
+  // See: stack/L1-physical/media.md
+  "hooks": {
+    "enabled": true,
+    "token": "${OPENCLAW_HOOKS_TOKEN}",
+    "entries": {
+      "media-sort": {
+        "kind": "lobster",
+        "pipeline": "pipelines/media-sort.lobster",
+        "on": "message.inbound",
+        "condition": "message.hasAttachment"
+      }
+    }
+  },
+
+  // ─── §8 PLUGINS ────────────────────────────────────────────
+  // Layer: L6-Processing
+  "plugins": {
+    "entries": {
+      "lobster": { "enabled": true },
+      "llm-task": {
+        "enabled": true,
+        "config": { "maxTokens": 800, "timeoutMs": 30000 }
+      },
+      "openclaw-mem0": {
+        "enabled": false,                // ⚠️ Flip after setup
+        "config": {
+          "apiKey": "${MEM0_API_KEY}",
+          "userId": "marty"
+        }
+      }
+    }
+  },
+
+  // ─── §9 CRON ───────────────────────────────────────────────
+  // Layer: L6-Processing | 4-layer media defense — Layer 4
+  // See: stack/L1-physical/media.md
+  "cron": {
+    "enabled": true,
+    "maxConcurrentRuns": 2,
+    "jobs": [
+      {
+        "name": "media-catchup",
+        "cron": "*/30 * * * *",          // Every 30 minutes
+        "kind": "lobster",
+        "pipeline": "pipelines/media-catchup.lobster"
+      },
+      {
+        "name": "media-cleanup",
+        "cron": "0 2 * * *",             // Daily at 2am
+        "kind": "lobster",
+        "pipeline": "pipelines/media-cleanup.lobster"
+      }
+    ]
+  },
+
+  // ─── §10 SKILLS ────────────────────────────────────────────
+  // Layer: L6-Processing
+  "skills": {
+    "entries": {
+      "sag": { "enabled": true },
+      "gog": { "enabled": true }
+      // Engineering (8), Data (7) — see stack/L6-processing/skills/_overview
+    }
+  },
+
+  // ─── MESSAGES, TALK, LOGGING ───────────────────────────────
+  "messages": {
+    "maxMessageLength": 4096,
+    "splitLongMessages": true,
+    "ackReaction": "👀"
+  },
+  "talk": {
+    "modelId": "eleven_v3",
+    "voiceId": "${ELEVENLABS_VOICE_ID}",
+    "apiKey": "${ELEVENLABS_API_KEY}"
+  },
+  "logging": {
+    "level": "info",
+    "redactSensitive": "tools"
+  }
+}

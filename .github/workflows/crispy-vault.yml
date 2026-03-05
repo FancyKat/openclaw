@@ -1,0 +1,104 @@
+name: Crispy Vault — Build & Validate
+
+on:
+  push:
+    branches: [main, crispy-onboard-builder]
+    paths:
+      - 'crispy-vault/**'
+  pull_request:
+    paths:
+      - 'crispy-vault/**'
+
+jobs:
+  build:
+    name: Build & Validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # ── Step 1: Full build ──────────────────────────────────
+      - name: Run build
+        working-directory: crispy-vault
+        run: node build/scripts/build-config.js
+        # Fails on missing blocks, duplicate IDs, or extraction errors
+
+      # ── Step 2: Validate JSON outputs ───────────────────────
+      - name: Validate openclaw.json
+        working-directory: crispy-vault
+        run: node -e "JSON.parse(require('fs').readFileSync('dist/openclaw.json','utf8'))"
+
+      - name: Validate focus JSON files
+        working-directory: crispy-vault
+        run: |
+          for f in dist/focus/*/*.json; do
+            node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" || {
+              echo "❌ Invalid JSON: $f"
+              exit 1
+            }
+          done
+          echo "✅ All focus JSON files valid"
+
+      - name: Validate LAYERS-MANIFEST.json
+        working-directory: crispy-vault
+        run: node -e "JSON.parse(require('fs').readFileSync('dist/LAYERS-MANIFEST.json','utf8'))"
+
+      # ── Step 3: Block audit ─────────────────────────────────
+      - name: Audit block coverage
+        working-directory: crispy-vault
+        run: |
+          OUTPUT=$(node build/scripts/build-config.js --audit 2>&1)
+          echo "$OUTPUT"
+
+          MISSING=$(echo "$OUTPUT" | grep -c "❌" || true)
+          if [ "$MISSING" -gt 0 ]; then
+            echo "❌ Missing block coverage detected"
+            exit 1
+          fi
+          echo "✅ All block coverage verified"
+
+      # ── Step 4: Wikilink integrity check ────────────────────
+      - name: Check for broken wikilinks
+        working-directory: crispy-vault
+        run: |
+          echo "Scanning for wikilinks..."
+          grep -roh '\[\[[^]]*\]\]' stack/ build/ 2>/dev/null \
+            | sed 's/\[\[//;s/\]\]//' \
+            | sed 's/#.*//' \
+            | sed 's/|.*//' \
+            | sort -u \
+            | while read -r link; do
+                [ -z "$link" ] && continue
+                if [ -f "${link}.md" ] || [ -f "$link" ]; then
+                  continue
+                fi
+                BASENAME=$(basename "$link")
+                FOUND=$(find stack/ build/ -name "${BASENAME}.md" 2>/dev/null | head -1)
+                if [ -n "$FOUND" ]; then
+                  continue
+                fi
+                echo "⚠️  Possibly broken: [[$link]]"
+              done
+          echo "✅ Wikilink scan complete"
+
+      # ── Step 5: Build summary ───────────────────────────────
+      - name: Build summary
+        working-directory: crispy-vault
+        run: |
+          echo "## Crispy Vault Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Artifact | Count |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Config (openclaw.json) | 1 |" >> $GITHUB_STEP_SUMMARY
+          echo "| Context files | $(ls dist/context-files/*.md 2>/dev/null | wc -l | tr -d ' ') |" >> $GITHUB_STEP_SUMMARY
+          echo "| Pipelines (.lobster) | $(find dist/pipelines -name '*.lobster' 2>/dev/null | wc -l | tr -d ' ') |" >> $GITHUB_STEP_SUMMARY
+          echo "| Focus categories | $(ls -d dist/focus/*/ 2>/dev/null | wc -l | tr -d ' ') |" >> $GITHUB_STEP_SUMMARY
+          echo "| Focus files total | $(find dist/focus -type f 2>/dev/null | wc -l | tr -d ' ') |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Built from $(find stack/ -name '*.md' | wc -l | tr -d ' ') vault files" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,23 @@
+{
+  "category": "finance",
+  "targets": {
+    "first_token_ms": 1500,
+    "complete_response_ms": 5000,
+    "pipeline_overhead_ms": 500
+  },
+  "thresholds": {
+    "button_tap_ms": 500,
+    "initial_response_ms": 1500,
+    "multi_turn_ms": 3000,
+    "complex_operation_ms": 8000,
+    "hang_threshold_ms": 8000
+  },
+  "pipelines": {
+    "market-brief":     { "latency_ms": [2000, 4000], "llm_calls": 1, "sync": true },
+    "position-check":   { "latency_ms": [1000, 3000], "llm_calls": 1, "sync": true },
+    "backtest":         { "latency_ms": [5000, 20000], "llm_calls": 1, "sync": false },
+    "watchlist":        { "latency_ms": [300,  800],  "llm_calls": 1, "sync": true },
+    "budget-review":    { "latency_ms": [800,  1500], "llm_calls": 1, "sync": true },
+    "expense-tracker":  { "latency_ms": [300,  800],  "llm_calls": 1, "sync": true }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "category": "design",
+  "targets": {
+    "first_token_ms": 1500,
+    "complete_response_ms": 5000,
+    "pipeline_overhead_ms": 500
+  },
+  "thresholds": {
+    "button_tap_ms": 500,
+    "initial_response_ms": 1500,
+    "multi_turn_ms": 3000,
+    "complex_operation_ms": 8000,
+    "hang_threshold_ms": 10000
+  },
+  "pipelines": {
+    "brand-audit": { "latency_ms": [1500, 3000], "llm_calls": 2, "sync": true }
+  },
+  "skills": {
+    "pptx":             { "latency_ms": [5000, 8000],  "sync": false },
+    "canvas-design":    { "latency_ms": [3000, 5000],  "sync": false },
+    "algorithmic-art":  { "latency_ms": [2000, 4000],  "sync": false }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "metadata": {
+    "lastUpdated": "2026-03-05T00:00:00Z",
+    "description": "Crispy Kitsune versioning metadata — tracks per-layer versions, build history, and production milestones"
+  },
+  "production": {
+    "current": 1,
+    "description": "0=development, 1=first successful boot, 2+=major restructures"
+  },
+  "build": {
+    "current": 14,
+    "counter": 14
+  },
+  "layers": {
+    "L1": {
+      "name": "Physical",
+      "version": "0.0.6",
+      "changes": 6,
+      "lastBuild": 12,
+      "files": 10
+    },
+    "L2": {
+      "name": "Runtime",
+      "version": "0.0.4",
+      "changes": 4,
+      "lastBuild": 12,
+      "files": 8
+    },
+    "L3": {
+      "name": "Channel",
+      "version": "0.0.4",
+      "changes": 4,
+      "lastBuild": 12,
+      "files": 17
+    },
+    "L4": {
+      "name": "Session",
+      "version": "0.0.4",
+      "changes": 4,
+      "lastBuild": 12,
+      "files": 18
+    },
+    "L5": {
+      "name": "Routing",
+      "version": "0.0.4",
+      "changes": 4,
+      "lastBuild": 12,
+      "files": 65
+    },
+    "L6": {
+      "name": "Processing",
+      "version": "0.0.5",
+      "changes": 5,
+      "lastBuild": 13,
+      "files": 27
+    },
+    "L7": {
+      "name": "Memory",
+      "version": "0.0.5",
+      "changes": 5,
+      "lastBuild": 13,
+      "files": 11
+    }
+  },
+  "releases": [
+    {
+      "tag": "v1.0",
+      "date": "2026-03-05",
+      "build": 14,
+      "changedLayers": ["L1","L2","L3","L4","L5","L6","L7"],
+      "note": "First stable release. Promoted from v0.013. Tested on Mac. Pre-openclaw-integration baseline."
+    },
+    {
+      "tag": "v0.013+L6.L7",
+      "date": "2026-03-04T23:33:52Z",
+      "build": 13,
+      "changedLayers": [
+        "L6",
+        "L7"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+# Obsidian — workspace state (changes every click, don't track)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+
+# Obsidian — plugin runtime data (regenerated on launch)
+.obsidian/plugins/*/data.json
+
+# OS junk
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Trash folder (Obsidian soft-deletes go here)
+.trash/
+
+# Build artifacts — dist/ is a temp staging area, releases/ is tracked
+dist/
+*.bak
+*.tmp
+.fuse_hidden*
+
+# Git worktrees (local-only checkout copies)
+.claude/worktrees/
+
+# Consolidation archives (originals preserved in git history)
+# Uncomment to exclude from tracking:
+# **/_archive/
+# **/.archive/

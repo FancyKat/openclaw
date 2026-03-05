@@ -1,0 +1,1 @@
+*Note the `cross_category` field — fitness is the first hat to explicitly pull from another category (cooking:nutrition). This is how we handle the nutrition overlap without conflating the two hats.*

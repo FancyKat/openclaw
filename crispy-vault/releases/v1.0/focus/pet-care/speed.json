@@ -1,0 +1,23 @@
+{
+  "category": "pet-care",
+  "targets": {
+    "first_token_ms": 1500,
+    "complete_response_ms": 5000,
+    "pipeline_overhead_ms": 500
+  },
+  "thresholds": {
+    "button_tap_ms": 500,
+    "initial_response_ms": 1500,
+    "multi_turn_ms": 3000,
+    "complex_operation_ms": 8000,
+    "hang_threshold_ms": 8000
+  },
+  "pipelines": {
+    "medication-tracker":  { "latency_ms": [300, 700], "llm_calls": 1, "sync": true },
+    "appointment":         { "latency_ms": [300, 600], "llm_calls": 1, "sync": true },
+    "feeding-schedule":    { "latency_ms": [200, 500], "llm_calls": 1, "sync": true },
+    "supply-list":         { "latency_ms": [300, 700], "llm_calls": 1, "sync": true },
+    "training-log":        { "latency_ms": [200, 500], "llm_calls": 1, "sync": true },
+    "grooming-schedule":   { "latency_ms": [300, 600], "llm_calls": 1, "sync": true }
+  }
+}

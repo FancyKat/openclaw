@@ -1,0 +1,9 @@
+{
+  "category": ["finance", "finance:markets", "finance:positions", "finance:strategy", "finance:budget", "finance:goals"],
+  "exclude_categories": ["cooking", "fitness:workout"],
+  "boost_fields": ["ticker", "strategy_name", "risk_level", "budget_category", "goal_name"],
+  "recency_weight": 0.35,
+  "semantic_weight": 0.25,
+  "category_weight": 0.25,
+  "frequency_weight": 0.15
+}

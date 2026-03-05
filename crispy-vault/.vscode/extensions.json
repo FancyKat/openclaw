@@ -1,0 +1,30 @@
+{
+  "recommendations": [
+    // Markdown
+    "yzhang.markdown-all-in-one",
+
+    // Data formats
+    "redhat.vscode-yaml",
+    "mrmlnc.vscode-json5",
+    "zainchen.json",
+
+    // Git
+    "donjayamanne.githistory",
+    "codezombiech.gitignore",
+
+    // Docker
+    "ms-azuretools.vscode-docker",
+    "ms-azuretools.vscode-containers",
+    "p1c2u.docker-compose",
+
+    // Remote / Ubuntu
+    "ms-vscode-remote.remote-ssh",
+    "ms-vscode-remote.remote-ssh-edit",
+    "ms-vscode-remote.remote-wsl",
+    "ms-vscode-remote.vscode-remote-extensionpack",
+    "ms-vscode.remote-explorer",
+
+    // Claude Code
+    "anthropic.claude-code"
+  ]
+}

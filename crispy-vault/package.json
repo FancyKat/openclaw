@@ -1,0 +1,12 @@
+{
+  "name": "crispy-vault",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "description": "Crispy Kitsune vault — OpenClaw config builder",
+  "scripts": {
+    "build": "node build/scripts/build-config.js",
+    "audit": "node build/scripts/build-config.js --audit",
+    "test": "node test/build.test.js"
+  }
+}

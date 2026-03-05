@@ -1,0 +1,301 @@
+{
+  "gateway": {
+    "port": 18789,
+    "bind": "loopback",
+    "mode": "local",
+    "auth": {
+      "mode": "token",
+      "token": "${OPENCLAW_GATEWAY_TOKEN}"
+    }
+  },
+  "agents": {
+    "defaults": {
+      "workspace": "~/.openclaw/workspace",
+      "model": {
+        "primary": "anthropic/claude-opus-4-6",
+        "fallbacks": [
+          "openrouter/deepseek/deepseek-r1",
+          "openrouter/deepseek/deepseek-chat-v3.2",
+          "openrouter/google/gemini-2.5-flash-lite-preview",
+          "openrouter/openrouter/auto"
+        ]
+      },
+      "models": {
+        "anthropic/claude-opus-4-6": {
+          "alias": "researcher",
+          "params": {
+            "extended_thinking": true,
+            "thinking": "high",
+            "maxTokens": 16384
+          }
+        },
+        "anthropic/claude-sonnet-4-5": {
+          "alias": "workhorse",
+          "params": {
+            "maxTokens": 8192
+          }
+        },
+        "openai/gpt-5.2": {
+          "alias": "workhorse-code",
+          "params": {
+            "maxTokens": 8192
+          }
+        },
+        "openrouter/deepseek/deepseek-r1": {
+          "alias": "coder"
+        },
+        "openrouter/deepseek/deepseek-chat-v3.2": {
+          "alias": "triage"
+        },
+        "openrouter/google/gemini-2.5-flash-lite-preview": {
+          "alias": "flash"
+        },
+        "openrouter/openrouter/auto": {
+          "alias": "free"
+        }
+      },
+      "compaction": {
+        "enabled": true,
+        "model": "flash"
+      },
+      "skipBootstrap": false,
+      "heartbeat": {
+        "every": "20m",
+        "target": "last",
+        "directPolicy": "allow"
+      },
+      "sandbox": {
+        "mode": "all",
+        "scope": "session",
+        "workspaceAccess": "rw",
+        "docker": {
+          "enabled": true,
+          "image": "openclaw-sandbox:bookworm-slim",
+          "readOnlyRoot": true,
+          "network": "bridge",
+          "memory": "2g",
+          "cpus": 2
+        }
+      },
+      "memorySearch": {
+        "enabled": true,
+        "provider": "gemini",
+        "model": "gemini-embedding-001",
+        "sync": {
+          "watch": true
+        },
+        "query": {
+          "hybrid": {
+            "enabled": true,
+            "vectorWeight": 0.7,
+            "textWeight": 0.3,
+            "candidateMultiplier": 4,
+            "mmr": {
+              "enabled": true,
+              "lambda": 0.7
+            },
+            "temporalDecay": {
+              "enabled": true,
+              "halfLifeDays": 30
+            }
+          }
+        },
+        "cache": {
+          "enabled": true,
+          "maxEntries": 50000
+        }
+      },
+      "auditLog": {
+        "enabled": true,
+        "location": "workspace/audit/",
+        "format": "jsonl",
+        "retention": {
+          "days": 90,
+          "archiveAfter": 30
+        },
+        "logToolCalls": true,
+        "logApprovals": true,
+        "logErrors": true,
+        "logTokens": true
+      }
+    },
+    "list": [
+      {
+        "id": "crispy",
+        "default": true,
+        "identity": {
+          "name": "Crispy",
+          "emoji": "🦊"
+        },
+        "model": {
+          "primary": "anthropic/claude-sonnet-4-5",
+          "fallbacks": [
+            "anthropic/claude-opus-4-6",
+            "openrouter/deepseek/deepseek-r1",
+            "openrouter/deepseek/deepseek-chat-v3.2",
+            "openrouter/google/gemini-2.5-flash-lite-preview",
+            "openrouter/openrouter/auto"
+          ]
+        }
+      },
+      {
+        "id": "crispy-code",
+        "identity": {
+          "name": "Crispy Code",
+          "emoji": "🔧"
+        },
+        "model": {
+          "primary": "openai/gpt-5.2",
+          "fallbacks": [
+            "anthropic/claude-opus-4-6",
+            "openrouter/deepseek/deepseek-r1",
+            "openrouter/deepseek/deepseek-chat-v3.2",
+            "openrouter/google/gemini-2.5-flash-lite-preview",
+            "openrouter/openrouter/auto"
+          ]
+        }
+      }
+    ]
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "botToken": "${TELEGRAM_BOT_TOKEN}",
+      "dmPolicy": "allowlist",
+      "allowFrom": [
+        "tg:${TELEGRAM_MARTY_ID}",
+        "tg:${TELEGRAM_WENTING_ID}"
+      ],
+      "groups": {
+        "*": {
+          "requireMention": true
+        }
+      },
+      "streaming": "partial",
+      "customCommands": {
+        "brief": {
+          "description": "Morning briefing"
+        },
+        "email": {
+          "description": "Email triage"
+        },
+        "git": {
+          "description": "Git status"
+        },
+        "pipelines": {
+          "description": "List pipelines"
+        }
+      },
+      "media": {
+        "enabled": true,
+        "inbound_path": "~/.openclaw/workspace/media/inbound/telegram",
+        "keep_sizes": [
+          "large"
+        ],
+        "max_file_size_mb": 2000,
+        "cache_downloaded_24h": true,
+        "create_metadata": true,
+        "metadata_format": "json"
+      }
+    },
+    "discord": {
+      "enabled": false,
+      "token": "${DISCORD_BOT_TOKEN}",
+      "dmPolicy": "pairing",
+      "guilds": {
+        "${DISCORD_GUILD_ID}": {
+          "requireMention": false
+        }
+      }
+    }
+  },
+  "tools": {
+    "alsoAllow": [
+      "lobster"
+    ],
+    "web": {
+      "search": {
+        "provider": "brave",
+        "apiKey": "${BRAVE_API_KEY}"
+      }
+    },
+    "media": {
+      "audio": {
+        "enabled": true
+      }
+    }
+  },
+  "hooks": {
+    "enabled": true,
+    "token": "${OPENCLAW_HOOKS_TOKEN}",
+    "path": "/hooks",
+    "mappings": [
+      {
+        "match": {
+          "path": "gmail"
+        },
+        "action": "agent",
+        "agentId": "crispy",
+        "deliver": true
+      }
+    ],
+    "entries": {
+      "media-sort": {
+        "kind": "lobster",
+        "pipeline": "pipelines/media-sort.lobster",
+        "on": "message.inbound",
+        "condition": "message.hasAttachment"
+      }
+    }
+  },
+  "plugins": {
+    "lobster": {
+      "enabled": true
+    },
+    "llm-task": {
+      "enabled": true,
+      "maxTokens": 800,
+      "timeout": 30
+    }
+  },
+  "cron": {
+    "enabled": true,
+    "maxConcurrentRuns": 2,
+    "sessionRetention": "24h",
+    "jobs": [
+      {
+        "name": "media-catchup",
+        "cron": "*/30 * * * *",
+        "kind": "lobster",
+        "pipeline": "pipelines/media-catchup.lobster"
+      },
+      {
+        "name": "media-cleanup",
+        "cron": "0 2 * * *",
+        "kind": "lobster",
+        "pipeline": "pipelines/media-cleanup.lobster"
+      }
+    ]
+  },
+  "skills": {
+    "entries": {
+      "sag": {
+        "enabled": true
+      },
+      "gog": {
+        "enabled": true,
+        "env": {
+          "GOG_KEYRING_PASSWORD": "${GOG_KEYRING_PASSWORD}"
+        }
+      }
+    },
+    "load": {
+      "watch": true,
+      "watchDebounceMs": 250
+    },
+    "install": {
+      "preferBrew": true,
+      "nodeManager": "npm"
+    }
+  }
+}

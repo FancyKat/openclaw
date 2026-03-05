@@ -1,0 +1,17 @@
+🔄 Habits Focus (CP2 active)
+├── ➕ Track                            ← log today's habits
+│   ├── ✅ Check In                    → habit-checkin pipeline
+│   └── 📝 Custom Log                  → agent loop (flexible)
+│
+├── 📊 Review                          ← see how I'm doing
+│   ├── 📅 Daily                       → habit-review pipeline (today)
+│   ├── 📆 Weekly                      → habit-review pipeline (week)
+│   └── 🔥 Streaks                     → streak-check pipeline
+│
+├── ✨ New Habit                        ← define a new habit
+│   └── SMART+ kicks in               ← what, how often, trigger, reward?
+│       → agent loop + memory write
+│
+└── 🔧 Adjust                          ← modify existing habits
+    ├── ⏸️ Pause                       → habit-update pipeline
+    └── 📈 Scale Up                    → agent loop (difficulty progression)

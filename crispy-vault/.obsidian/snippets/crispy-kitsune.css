@@ -1,0 +1,912 @@
+/* ============================================================
+   CRISPY KITSUNE STACK — Vault Theme v2.0
+   Custom CSS snippet for the CKS Obsidian vault.
+   Enable: Settings → Appearance → CSS Snippets → crispy-kitsune
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. ROOT VARIABLES — color palette + spacing
+   ---------------------------------------------------------- */
+:root {
+  /* Kitsune brand colors */
+  --ck-fox-orange: #f97316;
+  --ck-fox-amber: #f59e0b;
+  --ck-fox-warm: #fbbf24;
+  --ck-ember: #ef4444;
+  --ck-ice-blue: #3b82f6;
+  --ck-teal: #14b8a6;
+  --ck-purple: #8b5cf6;
+  --ck-green: #22c55e;
+  --ck-rose: #fb7185;
+
+  /* Layer-specific accent colors */
+  --ck-L1: #22c55e;   /* Physical — green */
+  --ck-L2: #3b82f6;   /* Runtime — blue */
+  --ck-L3: #14b8a6;   /* Channel — teal */
+  --ck-L4: #8b5cf6;   /* Session — purple */
+  --ck-L5: #f59e0b;   /* Routing — amber */
+  --ck-L6: #f97316;   /* Processing — orange */
+  --ck-L7: #fb7185;   /* Memory — rose */
+
+  /* Layer backgrounds (very subtle tints) */
+  --ck-L1-bg: rgba(34, 197, 94, 0.04);
+  --ck-L2-bg: rgba(59, 130, 246, 0.04);
+  --ck-L3-bg: rgba(20, 184, 166, 0.04);
+  --ck-L4-bg: rgba(139, 92, 246, 0.04);
+  --ck-L5-bg: rgba(245, 158, 11, 0.04);
+  --ck-L6-bg: rgba(249, 115, 22, 0.04);
+  --ck-L7-bg: rgba(251, 113, 133, 0.04);
+
+  /* Status colors */
+  --ck-finalized: #22c55e;
+  --ck-review: #3b82f6;
+  --ck-draft: #f59e0b;
+  --ck-planned: #9ca3af;
+
+  /* Mermaid node colors (light mode) */
+  --ck-mermaid-blue: #dbeafe;
+  --ck-mermaid-green: #dcfce7;
+  --ck-mermaid-amber: #fef3c7;
+  --ck-mermaid-red: #fee2e2;
+  --ck-mermaid-purple: #ede9fe;
+  --ck-mermaid-teal: #ccfbf1;
+  --ck-mermaid-rose: #ffe4e6;
+
+  /* General UI tweaks */
+  --ck-radius: 8px;
+  --ck-radius-sm: 4px;
+  --ck-radius-lg: 12px;
+  --ck-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --ck-shadow-hover: 0 4px 12px rgba(0,0,0,0.12);
+  --ck-shadow-diagram: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* Dark mode overrides */
+.theme-dark {
+  --ck-mermaid-blue: #1e3a5f;
+  --ck-mermaid-green: #14532d;
+  --ck-mermaid-amber: #78350f;
+  --ck-mermaid-red: #7f1d1d;
+  --ck-mermaid-purple: #3b0764;
+  --ck-mermaid-teal: #134e4a;
+  --ck-mermaid-rose: #881337;
+
+  --ck-L1-bg: rgba(34, 197, 94, 0.06);
+  --ck-L2-bg: rgba(59, 130, 246, 0.06);
+  --ck-L3-bg: rgba(20, 184, 166, 0.06);
+  --ck-L4-bg: rgba(139, 92, 246, 0.06);
+  --ck-L5-bg: rgba(245, 158, 11, 0.06);
+  --ck-L6-bg: rgba(249, 115, 22, 0.06);
+  --ck-L7-bg: rgba(251, 113, 133, 0.06);
+}
+
+/* ----------------------------------------------------------
+   1b. FULL-WIDTH PAGES — remove readable line width cap
+   All vault pages use 100% width for tables, diagrams, and
+   dense reference content. Obsidian's "Readable line length"
+   toggle is overridden here so the snippet controls layout.
+   ---------------------------------------------------------- */
+.markdown-preview-sizer,
+.markdown-source-view .cm-contentContainer {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.markdown-preview-view .markdown-preview-sizer {
+  max-width: 100% !important;
+  padding-left: 4% !important;
+  padding-right: 4% !important;
+}
+
+/* Also expand the editing view (Live Preview) */
+.markdown-source-view.mod-cm6 .cm-content {
+  max-width: 100% !important;
+}
+
+.markdown-source-view.mod-cm6 .cm-sizer {
+  max-width: 100% !important;
+  padding-left: 4% !important;
+  padding-right: 4% !important;
+}
+
+/* ----------------------------------------------------------
+   2. HEADINGS — cleaner hierarchy with subtle accents
+   ---------------------------------------------------------- */
+.markdown-rendered h1 {
+  border-bottom: 2px solid var(--ck-fox-orange);
+  padding-bottom: 0.3em;
+  margin-top: 1.5em;
+  letter-spacing: -0.01em;
+}
+
+.markdown-rendered h2 {
+  border-bottom: 1px solid var(--background-modifier-border);
+  padding-bottom: 0.2em;
+  margin-top: 1.8em;
+}
+
+.markdown-rendered h3 {
+  color: var(--text-normal);
+  margin-top: 1.4em;
+}
+
+/* ----------------------------------------------------------
+   3. LAYER PAGE ACCENTS — tinted H1 borders per layer
+   When you open a file tagged with layer/physical,
+   the H1 underline turns green, etc.
+   Uses Obsidian's cssclasses frontmatter approach.
+   ---------------------------------------------------------- */
+
+/* Apply via cssclasses: [ck-L1] in frontmatter, or
+   automatically by the file path selectors below */
+
+/* H1 border color per layer — matched by data-path in tab headers */
+.workspace-leaf-content[data-path*="L1-physical"] .markdown-rendered h1 {
+  border-bottom-color: var(--ck-L1);
+}
+.workspace-leaf-content[data-path*="L2-runtime"] .markdown-rendered h1 {
+  border-bottom-color: var(--ck-L2);
+}
+.workspace-leaf-content[data-path*="L3-channel"] .markdown-rendered h1 {
+  border-bottom-color: var(--ck-L3);
+}
+.workspace-leaf-content[data-path*="L4-session"] .markdown-rendered h1 {
+  border-bottom-color: var(--ck-L4);
+}
+.workspace-leaf-content[data-path*="L5-routing"] .markdown-rendered h1 {
+  border-bottom-color: var(--ck-L5);
+}
+.workspace-leaf-content[data-path*="L6-processing"] .markdown-rendered h1 {
+  border-bottom-color: var(--ck-L6);
+}
+.workspace-leaf-content[data-path*="L7-memory"] .markdown-rendered h1 {
+  border-bottom-color: var(--ck-L7);
+}
+
+/* ----------------------------------------------------------
+   4. TABLES — clean, readable, with hover highlighting
+   ---------------------------------------------------------- */
+.markdown-rendered table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9em;
+  border-radius: var(--ck-radius);
+  overflow: hidden;
+  box-shadow: var(--ck-shadow);
+  margin: 1em 0;
+}
+
+.markdown-rendered thead tr {
+  background-color: var(--background-secondary);
+  font-weight: 600;
+}
+
+.markdown-rendered thead th {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 2px solid var(--background-modifier-border);
+  white-space: nowrap;
+}
+
+.markdown-rendered tbody td {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  vertical-align: top;
+}
+
+.markdown-rendered tbody tr:hover {
+  background-color: var(--background-secondary);
+  transition: background-color 0.15s ease;
+}
+
+.markdown-rendered tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Severity emoji cells — centered */
+.markdown-rendered td:first-child {
+  text-align: center;
+}
+
+/* Dataview tables */
+.dataview.table-view-table {
+  border-radius: var(--ck-radius);
+  overflow: hidden;
+  box-shadow: var(--ck-shadow);
+}
+
+.dataview.table-view-table thead th {
+  padding: 10px 14px;
+  font-weight: 600;
+  border-bottom: 2px solid var(--background-modifier-border);
+  background-color: var(--background-secondary);
+}
+
+.dataview.table-view-table tbody td {
+  padding: 8px 14px;
+}
+
+.dataview.table-view-table tbody tr:hover {
+  background-color: var(--background-secondary);
+  transition: background-color 0.15s ease;
+}
+
+/* Status emoji column in Dataview tables — centered */
+.dataview.table-view-table td:nth-child(2) {
+  text-align: center;
+  font-size: 1.1em;
+}
+
+/* ----------------------------------------------------------
+   5. BLOCKQUOTES — styled callout-like notes
+   ---------------------------------------------------------- */
+.markdown-rendered blockquote {
+  border-left: 3px solid var(--ck-fox-orange);
+  background-color: var(--background-secondary);
+  padding: 12px 16px;
+  border-radius: 0 var(--ck-radius) var(--ck-radius) 0;
+  margin: 1em 0;
+  font-size: 0.95em;
+}
+
+/* ----------------------------------------------------------
+   6. CODE BLOCKS — subtle container with language labels
+   ---------------------------------------------------------- */
+.markdown-rendered pre {
+  border-radius: var(--ck-radius);
+  border: 1px solid var(--background-modifier-border);
+  padding: 14px;
+  font-size: 0.85em;
+  position: relative;
+}
+
+.markdown-rendered code:not(pre code) {
+  background-color: var(--background-secondary);
+  padding: 2px 6px;
+  border-radius: var(--ck-radius-sm);
+  font-size: 0.88em;
+}
+
+/* JSON5 / config blocks get a subtle amber tint */
+pre[class*="language-json"],
+pre[class*="language-json5"] {
+  border-left: 3px solid var(--ck-fox-amber);
+}
+
+/* Shell / bash blocks get a green tint */
+pre[class*="language-bash"],
+pre[class*="language-shell"] {
+  border-left: 3px solid var(--ck-green);
+}
+
+/* YAML / lobster blocks get a purple tint */
+pre[class*="language-yaml"],
+pre[class*="language-yml"] {
+  border-left: 3px solid var(--ck-purple);
+}
+
+/* ----------------------------------------------------------
+   7. MERMAID DIAGRAMS — the star of the show
+   ---------------------------------------------------------- */
+
+/* Diagram container — card-like, centered, scales to fit */
+.mermaid {
+  margin: 1.5em 0;
+  padding: 1.5em 1em;
+  background-color: var(--background-primary);
+  border-radius: var(--ck-radius-lg);
+  border: 1px solid var(--background-modifier-border);
+  box-shadow: var(--ck-shadow-diagram);
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Subtle top accent bar on diagrams */
+.mermaid::before {
+  content: "";
+  display: block;
+  width: calc(100% - 4em);
+  height: 3px;
+  background: linear-gradient(
+    to right,
+    var(--ck-fox-orange),
+    var(--ck-fox-amber),
+    var(--ck-fox-warm)
+  );
+  border-radius: 2px;
+  margin-bottom: 1em;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+/* Force SVGs to scale down and center — no horizontal scroll */
+.mermaid svg {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Override Mermaid's inline width/height that causes overflow */
+.mermaid[data-processed="true"] svg {
+  max-width: 100% !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* Subgraph labels — keep readable when scaled */
+.mermaid .cluster-label {
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+/* --- Mermaid node styling overrides --- */
+
+/* Flowchart nodes — rounder corners */
+.mermaid .node rect,
+.mermaid .node polygon,
+.mermaid .node circle {
+  rx: 8px;
+  ry: 8px;
+}
+
+/* Diamond (decision) nodes — thicker border */
+.mermaid .node polygon {
+  stroke-width: 2px;
+}
+
+/* Edge labels — easier to read */
+.mermaid .edgeLabel {
+  font-size: 0.85em;
+  background-color: var(--background-primary);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Edge paths — slightly thicker for readability */
+.mermaid .flowchart-link {
+  stroke-width: 2px;
+}
+
+/* Mermaid classDef color improvements for dark mode */
+.theme-dark .mermaid .node rect[style*="fill: rgb(219, 234, 254)"],
+.theme-dark .mermaid .node rect[style*="fill:#dbeafe"] {
+  fill: var(--ck-mermaid-blue) !important;
+}
+
+.theme-dark .mermaid .node rect[style*="fill: rgb(220, 252, 231)"],
+.theme-dark .mermaid .node rect[style*="fill:#dcfce7"] {
+  fill: var(--ck-mermaid-green) !important;
+}
+
+.theme-dark .mermaid .node rect[style*="fill: rgb(254, 243, 199)"],
+.theme-dark .mermaid .node rect[style*="fill:#fef3c7"] {
+  fill: var(--ck-mermaid-amber) !important;
+}
+
+.theme-dark .mermaid .node rect[style*="fill: rgb(254, 226, 226)"],
+.theme-dark .mermaid .node rect[style*="fill:#fee2e2"] {
+  fill: var(--ck-mermaid-red) !important;
+}
+
+.theme-dark .mermaid .node rect[style*="fill: rgb(237, 233, 254)"],
+.theme-dark .mermaid .node rect[style*="fill:#ede9fe"] {
+  fill: var(--ck-mermaid-purple) !important;
+}
+
+/* --- Dedicated diagram pages (cssclasses: [ck-diagram-page]) --- */
+/* When a file uses this class, diagrams expand to fill the page,
+   text scales up, and the readable-line-width cap is removed.
+   Usage: add `cssclasses: [ck-diagram-page]` to frontmatter. */
+
+.ck-diagram-page .markdown-preview-sizer {
+  max-width: 100% !important;
+  padding: 1em 2em;
+}
+
+.ck-diagram-page .mermaid {
+  padding: 2em 1.5em;
+  min-height: 400px;
+}
+
+.ck-diagram-page .mermaid svg {
+  max-width: none !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 80%;
+  max-height: 85vh;
+}
+
+/* Bump up all text inside diagram nodes on dedicated pages */
+.ck-diagram-page .mermaid .nodeLabel,
+.ck-diagram-page .mermaid .node text,
+.ck-diagram-page .mermaid .label text,
+.ck-diagram-page .mermaid .edgeLabel,
+.ck-diagram-page .mermaid .cluster-label {
+  font-size: 1em !important;
+}
+
+/* Thicker edges for readability at scale */
+.ck-diagram-page .mermaid .flowchart-link {
+  stroke-width: 2.5px;
+}
+
+/* --- Mermaid diagram per-layer accent --- */
+/* When a diagram is inside a layer page, the top bar
+   changes to that layer's color */
+.workspace-leaf-content[data-path*="L1-physical"] .mermaid::before {
+  background: linear-gradient(to right, var(--ck-L1), rgba(34,197,94,0.3));
+}
+.workspace-leaf-content[data-path*="L2-runtime"] .mermaid::before {
+  background: linear-gradient(to right, var(--ck-L2), rgba(59,130,246,0.3));
+}
+.workspace-leaf-content[data-path*="L3-channel"] .mermaid::before {
+  background: linear-gradient(to right, var(--ck-L3), rgba(20,184,166,0.3));
+}
+.workspace-leaf-content[data-path*="L4-session"] .mermaid::before {
+  background: linear-gradient(to right, var(--ck-L4), rgba(139,92,246,0.3));
+}
+.workspace-leaf-content[data-path*="L5-routing"] .mermaid::before {
+  background: linear-gradient(to right, var(--ck-L5), rgba(245,158,11,0.3));
+}
+.workspace-leaf-content[data-path*="L6-processing"] .mermaid::before {
+  background: linear-gradient(to right, var(--ck-L6), rgba(249,115,22,0.3));
+}
+.workspace-leaf-content[data-path*="L7-memory"] .mermaid::before {
+  background: linear-gradient(to right, var(--ck-L7), rgba(251,113,133,0.3));
+}
+
+/* ----------------------------------------------------------
+   8. TAGS — colored pills based on namespace
+   ---------------------------------------------------------- */
+
+/* Base tag styling */
+.tag {
+  border-radius: 12px !important;
+  padding: 2px 10px !important;
+  font-size: 0.8em !important;
+  font-weight: 500 !important;
+  border: 1px solid transparent !important;
+  transition: all 0.15s ease;
+}
+
+.tag:hover {
+  filter: brightness(1.15);
+  box-shadow: var(--ck-shadow);
+}
+
+/* Status tags */
+a.tag[href="#status/finalized"] {
+  background-color: rgba(34, 197, 94, 0.15) !important;
+  color: var(--ck-finalized) !important;
+  border-color: rgba(34, 197, 94, 0.3) !important;
+}
+a.tag[href="#status/review"] {
+  background-color: rgba(59, 130, 246, 0.15) !important;
+  color: var(--ck-review) !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+a.tag[href="#status/draft"] {
+  background-color: rgba(245, 158, 11, 0.15) !important;
+  color: var(--ck-draft) !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+a.tag[href="#status/planned"] {
+  background-color: rgba(156, 163, 175, 0.15) !important;
+  color: var(--ck-planned) !important;
+  border-color: rgba(156, 163, 175, 0.3) !important;
+}
+
+/* Layer tags */
+a.tag[href="#layer/physical"] {
+  background-color: rgba(34, 197, 94, 0.12) !important;
+  color: var(--ck-L1) !important;
+  border-color: rgba(34, 197, 94, 0.25) !important;
+}
+a.tag[href="#layer/runtime"] {
+  background-color: rgba(59, 130, 246, 0.12) !important;
+  color: var(--ck-L2) !important;
+  border-color: rgba(59, 130, 246, 0.25) !important;
+}
+a.tag[href="#layer/channel"] {
+  background-color: rgba(20, 184, 166, 0.12) !important;
+  color: var(--ck-L3) !important;
+  border-color: rgba(20, 184, 166, 0.25) !important;
+}
+a.tag[href="#layer/session"] {
+  background-color: rgba(139, 92, 246, 0.12) !important;
+  color: var(--ck-L4) !important;
+  border-color: rgba(139, 92, 246, 0.25) !important;
+}
+a.tag[href="#layer/routing"] {
+  background-color: rgba(245, 158, 11, 0.12) !important;
+  color: var(--ck-L5) !important;
+  border-color: rgba(245, 158, 11, 0.25) !important;
+}
+a.tag[href="#layer/processing"] {
+  background-color: rgba(249, 115, 22, 0.12) !important;
+  color: var(--ck-L6) !important;
+  border-color: rgba(249, 115, 22, 0.25) !important;
+}
+a.tag[href="#layer/memory"] {
+  background-color: rgba(251, 113, 133, 0.12) !important;
+  color: var(--ck-L7) !important;
+  border-color: rgba(251, 113, 133, 0.25) !important;
+}
+
+/* Type tags — neutral/subtle */
+a.tag[href*="#type/"] {
+  background-color: var(--background-secondary) !important;
+  color: var(--text-muted) !important;
+  border-color: var(--background-modifier-border) !important;
+}
+
+/* Channel tags */
+a.tag[href="#channel/telegram"] {
+  background-color: rgba(59, 130, 246, 0.12) !important;
+  color: #2AABEE !important;
+  border-color: rgba(42, 171, 238, 0.25) !important;
+}
+a.tag[href="#channel/discord"] {
+  background-color: rgba(88, 101, 242, 0.12) !important;
+  color: #5865F2 !important;
+  border-color: rgba(88, 101, 242, 0.25) !important;
+}
+a.tag[href="#channel/gmail"] {
+  background-color: rgba(234, 67, 53, 0.12) !important;
+  color: #EA4335 !important;
+  border-color: rgba(234, 67, 53, 0.25) !important;
+}
+
+/* Topic tags — warm kitsune accent */
+a.tag[href*="#topic/"] {
+  background-color: rgba(249, 115, 22, 0.08) !important;
+  color: var(--ck-fox-orange) !important;
+  border-color: rgba(249, 115, 22, 0.2) !important;
+}
+
+/* ----------------------------------------------------------
+   9. LINKS — wikilinks + external
+   ---------------------------------------------------------- */
+.internal-link {
+  text-decoration: none;
+  border-bottom: 1px dashed var(--ck-ice-blue);
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.internal-link:hover {
+  border-bottom-style: solid;
+  color: var(--ck-ice-blue);
+}
+
+/* Unresolved (broken) links — make them obvious */
+.internal-link.is-unresolved {
+  color: var(--ck-ember) !important;
+  border-bottom-color: var(--ck-ember) !important;
+  opacity: 0.7;
+}
+
+/* External links get a subtle icon indicator */
+.external-link {
+  text-decoration: none;
+  border-bottom: 1px dashed var(--ck-teal);
+}
+
+.external-link:hover {
+  border-bottom-style: solid;
+  color: var(--ck-teal);
+}
+
+/* ----------------------------------------------------------
+   10. HORIZONTAL RULES — subtle separators
+   ---------------------------------------------------------- */
+.markdown-rendered hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--background-modifier-border),
+    transparent
+  );
+  margin: 2em 0;
+}
+
+/* ----------------------------------------------------------
+   11. SIDEBAR — folder colors per layer
+   ---------------------------------------------------------- */
+
+/* Give layer folders distinct left borders in the file tree */
+.nav-folder-title[data-path*="L1-physical"] {
+  border-left: 3px solid var(--ck-L1);
+  padding-left: 6px;
+}
+.nav-folder-title[data-path*="L2-runtime"] {
+  border-left: 3px solid var(--ck-L2);
+  padding-left: 6px;
+}
+.nav-folder-title[data-path*="L3-channel"] {
+  border-left: 3px solid var(--ck-L3);
+  padding-left: 6px;
+}
+.nav-folder-title[data-path*="L4-session"] {
+  border-left: 3px solid var(--ck-L4);
+  padding-left: 6px;
+}
+.nav-folder-title[data-path*="L5-routing"] {
+  border-left: 3px solid var(--ck-L5);
+  padding-left: 6px;
+}
+.nav-folder-title[data-path*="L6-processing"] {
+  border-left: 3px solid var(--ck-L6);
+  padding-left: 6px;
+}
+.nav-folder-title[data-path*="L7-memory"] {
+  border-left: 3px solid var(--ck-L7);
+  padding-left: 6px;
+}
+
+/* Build + root folders */
+.nav-folder-title[data-path*="build"] {
+  border-left: 3px solid var(--ck-fox-amber);
+  padding-left: 6px;
+}
+
+/* Active file highlight in sidebar */
+.nav-file-title.is-active {
+  border-left: 2px solid var(--ck-fox-orange);
+  padding-left: 4px;
+}
+
+/* ----------------------------------------------------------
+   12. GRAPH VIEW — layer-colored nodes
+   ---------------------------------------------------------- */
+.graph-view.color-fill {
+  opacity: 0.85;
+}
+
+/* Graph node text — slightly larger */
+.graph-view .node text {
+  font-size: 0.75em;
+}
+
+/* ----------------------------------------------------------
+   13. FRONTMATTER — compact and subtle
+   ---------------------------------------------------------- */
+.metadata-container {
+  background-color: var(--background-secondary);
+  border-radius: var(--ck-radius);
+  padding: 8px 12px;
+  margin-bottom: 1em;
+  border: 1px solid var(--background-modifier-border);
+}
+
+/* ----------------------------------------------------------
+   14. CALLOUTS — custom CKS callouts
+   Obsidian supports callout types in blockquotes:
+   > [!warning] Title
+   > Content
+   ---------------------------------------------------------- */
+
+/* Status callouts */
+.callout[data-callout="finalized"] {
+  --callout-color: 34, 197, 94;
+  --callout-icon: lucide-check-circle;
+}
+
+.callout[data-callout="review"] {
+  --callout-color: 59, 130, 246;
+  --callout-icon: lucide-search;
+}
+
+.callout[data-callout="draft"] {
+  --callout-color: 245, 158, 11;
+  --callout-icon: lucide-pencil;
+}
+
+.callout[data-callout="planned"] {
+  --callout-color: 156, 163, 175;
+  --callout-icon: lucide-clock;
+}
+
+/* Layer callouts — for cross-referencing */
+.callout[data-callout="L1"],
+.callout[data-callout="physical"] {
+  --callout-color: 34, 197, 94;
+  --callout-icon: lucide-server;
+}
+
+.callout[data-callout="L2"],
+.callout[data-callout="runtime"] {
+  --callout-color: 59, 130, 246;
+  --callout-icon: lucide-play;
+}
+
+.callout[data-callout="L3"],
+.callout[data-callout="channel"] {
+  --callout-color: 20, 184, 166;
+  --callout-icon: lucide-message-square;
+}
+
+.callout[data-callout="L4"],
+.callout[data-callout="session"] {
+  --callout-color: 139, 92, 246;
+  --callout-icon: lucide-brain;
+}
+
+.callout[data-callout="L5"],
+.callout[data-callout="routing"] {
+  --callout-color: 245, 158, 11;
+  --callout-icon: lucide-route;
+}
+
+.callout[data-callout="L6"],
+.callout[data-callout="processing"] {
+  --callout-color: 249, 115, 22;
+  --callout-icon: lucide-cpu;
+}
+
+.callout[data-callout="L7"],
+.callout[data-callout="memory"] {
+  --callout-color: 251, 113, 133;
+  --callout-icon: lucide-database;
+}
+
+/* Crispy-specific callouts */
+.callout[data-callout="kitsune"],
+.callout[data-callout="crispy"] {
+  --callout-color: 249, 115, 22;
+  --callout-icon: lucide-flame;
+}
+
+.callout[data-callout="pipeline"] {
+  --callout-color: 139, 92, 246;
+  --callout-icon: lucide-git-branch;
+}
+
+.callout[data-callout="hook"] {
+  --callout-color: 239, 68, 68;
+  --callout-icon: lucide-zap;
+}
+
+.callout[data-callout="config"] {
+  --callout-color: 59, 130, 246;
+  --callout-icon: lucide-settings;
+}
+
+.callout[data-callout="security"] {
+  --callout-color: 239, 68, 68;
+  --callout-icon: lucide-shield;
+}
+
+.callout[data-callout="todo"] {
+  --callout-color: 249, 115, 22;
+  --callout-icon: lucide-list-checks;
+}
+
+/* ----------------------------------------------------------
+   15. SCROLLBAR — thinner, on-brand
+   ---------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--background-modifier-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ck-fox-orange);
+}
+
+/* ----------------------------------------------------------
+   16. NAVIGATION FOOTER — Up/Down/Back links
+   Style the navigation links at the bottom of every page
+   ---------------------------------------------------------- */
+
+/* Strong links in the last paragraph (nav footer) */
+.markdown-rendered p:last-of-type strong .internal-link,
+.markdown-rendered p:nth-last-of-type(2) strong .internal-link,
+.markdown-rendered p:nth-last-of-type(3) strong .internal-link {
+  border-bottom: none;
+}
+
+/* ----------------------------------------------------------
+   17. CHECKBOX / TODO STYLING
+   ---------------------------------------------------------- */
+.markdown-rendered input[type="checkbox"] {
+  border-radius: 4px;
+  border: 2px solid var(--ck-fox-amber);
+  width: 16px;
+  height: 16px;
+}
+
+.markdown-rendered input[type="checkbox"]:checked {
+  background-color: var(--ck-green);
+  border-color: var(--ck-green);
+}
+
+/* ----------------------------------------------------------
+   18. EMBEDDED / TRANSCLUSION BLOCKS
+   ---------------------------------------------------------- */
+.markdown-embed {
+  border-left: 3px solid var(--ck-fox-orange);
+  border-radius: 0 var(--ck-radius) var(--ck-radius) 0;
+  padding: 8px 12px;
+  margin: 1em 0;
+}
+
+/* ----------------------------------------------------------
+   19. LIST IMPROVEMENTS
+   ---------------------------------------------------------- */
+.markdown-rendered ul > li::marker {
+  color: var(--ck-fox-orange);
+}
+
+.markdown-rendered ol > li::marker {
+  color: var(--ck-fox-amber);
+  font-weight: 600;
+}
+
+/* Nested list indentation */
+.markdown-rendered ul ul,
+.markdown-rendered ol ul {
+  border-left: 1px solid var(--background-modifier-border);
+  margin-left: 0.5em;
+  padding-left: 1em;
+}
+
+/* ----------------------------------------------------------
+   20. SEARCH RESULTS — easier to scan
+   ---------------------------------------------------------- */
+.search-result-file-matched-text {
+  background-color: rgba(249, 115, 22, 0.2);
+  border-radius: 2px;
+}
+
+/* ----------------------------------------------------------
+   21. TAB HEADER — layer color indicator
+   ---------------------------------------------------------- */
+.workspace-tab-header[data-path*="L1-physical"] {
+  border-bottom: 2px solid var(--ck-L1);
+}
+.workspace-tab-header[data-path*="L2-runtime"] {
+  border-bottom: 2px solid var(--ck-L2);
+}
+.workspace-tab-header[data-path*="L3-channel"] {
+  border-bottom: 2px solid var(--ck-L3);
+}
+.workspace-tab-header[data-path*="L4-session"] {
+  border-bottom: 2px solid var(--ck-L4);
+}
+.workspace-tab-header[data-path*="L5-routing"] {
+  border-bottom: 2px solid var(--ck-L5);
+}
+.workspace-tab-header[data-path*="L6-processing"] {
+  border-bottom: 2px solid var(--ck-L6);
+}
+.workspace-tab-header[data-path*="L7-memory"] {
+  border-bottom: 2px solid var(--ck-L7);
+}
+
+/* ----------------------------------------------------------
+   22. PRINT / EXPORT — clean output
+   ---------------------------------------------------------- */
+@media print {
+  .tag { border: 1px solid #ccc !important; }
+  .nav-folder-title { border-left: none !important; }
+  .mermaid { border: 1px solid #eee; box-shadow: none; }
+  .mermaid::before { display: none; }
+  hr { background: #ddd; }
+  table { box-shadow: none; }
+}
